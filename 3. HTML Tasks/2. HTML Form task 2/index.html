@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0683cc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            margin: 20px;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        td {
+            padding: 10px;
+        }
+
+        button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        button[type="reset"] {
+            background-color: #a5acb0;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            position: relative;
+        }
+
+        .pop-content > h2 {
+            margin-right: 30px;
+        }
+
+        #popupContent {
+            position: relative;
+            left: 450px;
+        }
+
+        #table {
+            text-align: center;
+            border-radius: 5px;
+            width: 500px;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1><b>Customer Survey Form</b></h1>
+    <br><br> <!-- Add two line breaks here -->
+    <div class="container">
+        <form id="surveyForm">
+            <table>
+                <tr>
+                    <td><label for="firstName">First Name:</label></td>
+                    <td><input type="text" id="firstName" required></td>
+                </tr>
+                <tr>
+                    <td><label for="lastName">Last Name:</label></td>
+                    <td><input type="text" id="lastName" required></td>
+                </tr>
+                <tr>
+                    <td><label for="dob">Date of Birth:</label></td>
+                    <td><input type="date" id="dob" required></td>
+                </tr>
+                <tr>
+                    <td><label for="country">Country:</label></td>
+                    <td>
+                        <select id="country" required>
+                            <option value="">Select Country</option>
+                            <option value="India">India</option>
+                            <option value="china">China</option>
+                            <option value="usa">Usa</option>
+                            <option value="uk">Uk</option>
+                            <option value="pakistan">Pakistan</option>
+                            <option value="Russia">Russia</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Gender:</label></td>
+                    <td>
+                        <input type="checkbox" name="gender" id="male" value="Male"> <label for="male">Male</label>
+                        <input type="checkbox" name="gender" id="female" value="Female"> <label for="female">Female</label>
+                        <input type="checkbox" name="gender" id="custom" value="Custom"> <label for="custom">Custom</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="profession">Profession:</label></td>
+                    <td><input type="text" id="profession" required></td>
+                </tr>
+                <tr>
+                    <td><label for="email">Email:</label></td>
+                    <td><input type="email" id="email" required></td>
+                </tr>
+                <tr>
+                    <td><label for="mobile">Mobile Number:</label></td>
+                    <td><input type="tel" id="mobile" required></td>
+                </tr>
+                <tr>
+                    <td><label for="suggestions">Suggestions:</label></td>
+                    <td><textarea rows="2" cols="20" name="address"id="suggestions" class="for"></textarea></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <button type="button" onclick="submitForm()">Submit</button>
+                        <button type="reset" onclick="resetForm()">Reset</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <div class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <h2>Survey Form Submission</h2>
+            <div id="popupContent"></div>
+        </div>
+    </div>
+    <script>
+        function submitForm() {
+            var firstName = document.getElementById("firstName").value;
+            var lastName = document.getElementById("lastName").value;
+            var dob = document.getElementById("dob").value;
+            var country = document.getElementById("country").value;
+            var genderElements = document.querySelectorAll("input[name='gender']:checked");
+            var gender = Array.from(genderElements).map(element => element.value).join(', ');
+            var profession = document.getElementById("profession").value;
+            var email = document.getElementById("email").value;
+            var mobile = document.getElementById("mobile").value;
+            var suggestions = document.getElementById("suggestions").value;
+
+    
+            if (validateForm(firstName, lastName, dob, country, gender, profession, email, mobile, suggestions)) {
+                displayPopup(firstName, lastName, dob, country, gender, profession, email, mobile, suggestions);
+            }
+        }
+    
+        function validateForm(firstName, lastName, dob, country, gender, profession, email, mobile) {
+            if (!firstName) {
+                alert("First Name is required!");
+                return false;
+            }
+    
+            if (!lastName) {
+                alert("Last Name is required!");
+                return false;
+            }
+    
+            if (!dob) {
+                alert("Date of Birth is required!");
+                return false;
+            }
+    
+            if (!country) {
+                alert("Country is required!");
+                return false;
+            }
+    
+            if (!gender) {
+                alert("Gender is required!");
+                return false;
+            }
+    
+            if (!profession) {
+                alert("Profession is required!");
+                return false;
+            }
+    
+            if (!email) {
+                alert("Please give an Email..");
+                return false;
+            }
+    
+            if (email.indexOf('@') == -1) {
+                alert("Please give a valid Email!..");
+                return false;
+            }
+    
+            if (mobile.length != 10) {
+                alert("Please enter a 10-digit mobile number!..");
+                return false;
+            }
+            return true;
+        }
+    
+        function displayPopup(firstName, lastName, dob, country, gender, profession, email, mobile, suggestions) {
+            var popupContent = document.getElementById("popupContent");
+            popupContent.innerHTML = `
+            <table id="table" border='1px'>
+                <tr>
+                    <td><strong>First Name &nbsp;</strong></td>
+                    <td>${firstName}</td>
+                </tr>
+                <tr>
+                    <td><strong>Last Name &nbsp;</strong></td>
+                    <td>${lastName}</td>
+                </tr>
+                <tr>
+                    <td><strong>Date of Birth</strong></td>
+                    <td>${dob}</td>
+                </tr>
+                <tr>
+                    <td><strong>Country</strong></td>
+                    <td>${country}</td>
+                </tr>
+                <tr>
+                    <td><strong>Gender</strong></td>
+                    <td>${gender}</td>
+                </tr>
+                <tr>
+                    <td><strong>Profession</strong></td>
+                    <td>${profession}</td>
+                </tr>
+                <tr>
+                    <td><strong>Email</strong></td>
+                    <td>${email}</td>
+                </tr>
+                <tr>
+                    <td><strong>Mobile Number</strong></td>
+                    <td>${mobile}</td>
+                </tr>
+                <tr>
+                    <td><strong>Suggestions</strong></td>
+                    <td>${suggestions}</td>
+                </tr>
+            </table>
+            <button type="button" onclick="closePopup()">OK</button>
+        `;
+    
+            var popup = document.querySelector(".popup");
+            popup.style.display = "block";
+        }
+    
+        function resetForm() {
+            document.getElementById("surveyForm").reset();
+        }
+    
+        function closePopup() {
+            var popup = document.querySelector(".popup");
+            popup.style.display = "none";
+            alert("Form submitted successfully");
+            resetForm();
+        }
+    </script>
+    
+</body>
+
+</html>
