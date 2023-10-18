@@ -15,9 +15,7 @@ public class Pangram {
                 uniqueChar.add(ch);
             }
         }
-
-        return uniqueChar.size() == 26;
-        
+        return uniqueChar.size() == 26; 
     }
 
     public static void main(String[] args) {
