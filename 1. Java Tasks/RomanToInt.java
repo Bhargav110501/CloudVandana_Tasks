@@ -29,7 +29,6 @@ class RomanToInt{
 
             prevValue = currentValue;
         }
-
         return res;
     }
 
